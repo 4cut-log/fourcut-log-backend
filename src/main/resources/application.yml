@@ -1,6 +1,31 @@
+MYSQL_ADDRESS: "jdbc:mysql://localhost:3306/fourcut_log_db?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true"
+MYSQL_USERNAME: "admin"
+MYSQL_PASSWORD: "REDACTED"
+
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+ datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: ${MYSQL_ADDRESS}
+  username: ${MYSQL_USERNAME}
+  password: ${MYSQL_PASSWORD}
+
+  jpa:
+   open-in-view: true
+   hibernate:
+    ddl-auto: create
+    naming:
+     physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    use-new-id-generator-mappings: false
+   show-sql: true
+   properties:
+    hibernate.format_sql: true
+    dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+logging:
+ level:
+  org.hibernate.SQL: debug
+
+security:
+ user:
+  name: user
+  password: 1234
