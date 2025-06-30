@@ -14,12 +14,12 @@ import com.flog.fourcut_log.global.util.ResponseUtil;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ApiResponse<?>> handleCustomException(CustomException e) {
+    public ResponseEntity<ApiResponse<Void>> handleCustomException(CustomException e) {
         return ResponseUtil.error(e.getResponseCode());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<?>> handleUnknownException(Exception e) {
+    public ResponseEntity<ApiResponse<Void>> handleUnknownException(Exception e) {
         log.error("[UNEXPECTED ERROR]", e);
         return ResponseUtil.error(ResponseCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
