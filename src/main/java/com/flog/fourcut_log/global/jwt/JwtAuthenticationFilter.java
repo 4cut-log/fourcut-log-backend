@@ -30,13 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtUtil.validateToken(token)) {
 
             // ③ 토큰에서 사용자 정보 추출
-            String email = jwtUtil.getUsername(token);
+            Long userId = jwtUtil.getUserId(token);
             String role = jwtUtil.getRole(token);
 
-            // ④ SecurityContext에 인증 정보 저장
+            // ④ SecurityContext에 인증 정보 저장 (principal을 userId로 설정)
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
-                            email,
+                            userId,
                             null,
                             List.of(new SimpleGrantedAuthority("ROLE_" + role))
                     );
