@@ -46,10 +46,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // OAuth2CustomUser 반환 (Spring Security가 사용)
         return new OAuth2CustomUser(
-                registrationId,      // OAuth2 제공자
-                originAttributes,    // 원본 OAuth2 데이터
-                authorities,         // 권한 목록
-                savedUser.getEmail() // 사용자 이메일
+                registrationId,           // OAuth2 제공자
+                originAttributes,         // 원본 OAuth2 데이터
+                authorities,              // 권한 목록
+                savedUser.getEmail(),     // 사용자 이메일 (Redis 키로 사용)
+                savedUser.getId(),        // DB에서 생성된 userId
+                savedUser.getNickname()   // 닉네임
         );
 
     }

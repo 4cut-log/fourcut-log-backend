@@ -49,7 +49,8 @@ public class SecurityConfig {
                                     AntPathRequestMatcher.antMatcher("/auth/**"),
                                     AntPathRequestMatcher.antMatcher("/login/**"),
                                     AntPathRequestMatcher.antMatcher("/oauth2/**"),
-                                    AntPathRequestMatcher.antMatcher("/token/reissue")
+                                    AntPathRequestMatcher.antMatcher("/token/reissue"),
+                                    AntPathRequestMatcher.antMatcher("/app/version")
                             ).permitAll()
                             .anyRequest().authenticated()
             )

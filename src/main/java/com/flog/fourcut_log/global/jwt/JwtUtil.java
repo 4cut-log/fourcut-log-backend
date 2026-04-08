@@ -23,22 +23,23 @@ public class JwtUtil {
         this.redisTemplate = redisTemplate;
     }
 
-    public String createJwt(String username, String role, Long expirationTime) {
+    public String createJwt(String username, String role, Long userId, Long expirationTime) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role)
+                .claim("userId", userId)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String createAccessToken(String username, String role) {
-        return createJwt(username, role, 1000 * 60 * 30L); // 30분
+    public String createAccessToken(String username, String role, Long userId) {
+        return createJwt(username, role, userId, 1000 * 60 * 30L); // 30분
     }
 
-    public String createRefreshToken(String username, String role) {
-        String refreshToken = createJwt(username, role, 1000 * 60 * 60 * 24 * 7L); // 7일
+    public String createRefreshToken(String username, String role, Long userId) {
+        String refreshToken = createJwt(username, role, userId, 1000 * 60 * 60 * 24 * 7L); // 7일
         redisTemplate.opsForValue().set(username, refreshToken, 7, TimeUnit.DAYS);
         return refreshToken;
     }
@@ -49,6 +50,10 @@ public class JwtUtil {
 
     public String getRole(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("role", String.class);
+    }
+
+    public Long getUserId(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("userId", Long.class);
     }
 
     public Boolean validateToken(String token) {

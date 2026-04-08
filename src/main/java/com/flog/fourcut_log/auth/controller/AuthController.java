@@ -46,6 +46,7 @@ public class AuthController {
 
         String email = jwtUtil.getUsername(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
+        Long userId = jwtUtil.getUserId(refreshToken);
 
         // 2. Redis에 저장된 Refresh Token과 일치 여부 확인
         String storedRefreshToken = redisTemplate.opsForValue().get(email);
@@ -55,8 +56,8 @@ public class AuthController {
         }
 
         // 3. 새 토큰 발급 (Refresh Token Rotation - 보안을 위해 둘 다 새로 발급)
-        String newAccessToken = jwtUtil.createAccessToken(email, role);
-        String newRefreshToken = jwtUtil.createRefreshToken(email, role);
+        String newAccessToken = jwtUtil.createAccessToken(email, role, userId);
+        String newRefreshToken = jwtUtil.createRefreshToken(email, role, userId);
 
         TokenResponse tokenResponse = TokenResponse.builder()
                 .accessToken(newAccessToken)
